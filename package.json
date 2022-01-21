@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "dev": "parcel serve ./app/index.html --port 8080",
+    "dev": "parcel serve ./app/index.html --port 8080 --dist-dir distdev",
     "build": "parcel build --public-url ./ ./app/index.html"
   },
   "devDependencies": {

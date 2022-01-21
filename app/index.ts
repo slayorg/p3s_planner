@@ -197,9 +197,10 @@ function updateCones(){
         cone.rotation((angle * 180 / Math.PI)-90);
     });
 
-    targets = [...players];
+    
     
     tornadoCones.forEach((cone, ci )=> {
+        targets = [...players];
         let target: Konva.Circle = targets[0];
         let dist = getDistance(target.position(), cone.position());
 

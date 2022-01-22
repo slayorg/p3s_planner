@@ -132,8 +132,11 @@ export class ConeMarker extends ArenaObject{
     }
 
     inMarker(obj: ArenaObject): boolean{
-        const angle = Math.atan2(this.y - obj.y, this.x - obj.x) - this.angle;
-        return angle < (this.coneAngle/2) && angle > -(this.coneAngle/2);
+        const angle = Math.atan2(this.y - obj.y, this.x - obj.x);
+
+        const difference = Math.PI - Math.abs(Math.abs((angle+Math.PI) - (this.angle+Math.PI)) - Math.PI);
+
+        return difference < (this.coneAngle/2);
     }
 }
 

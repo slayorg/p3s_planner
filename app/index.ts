@@ -67,9 +67,12 @@ for(let i=0; i<2; i++){
     }, ["tanktether", "damage"]));
 }
 
+
+
 for(let i=0; i<2; i++){
     arena.addObject(new CircleMarker(0.5, 0, 0, {fill: "blue", draggable: true}, ["player", "tank"]));
 }
+
 for(let i=0; i<2; i++){
     arena.addObject(new CircleMarker(0.5, 5, 5, {fill: "green", draggable: true}, ["player", "healer"]));
 }
@@ -103,6 +106,7 @@ arena.onUpdate = () => {
     const damageMarkers = arena.getByTag(["damage"]);
     const players = arena.getByTag(["player"]) as CircleMarker[];
     const playerHits: number[] = new Array(players.length).fill(0);
+    console.log(playerHits);
     damageMarkers.forEach(aoe => {
         players.forEach((player, pindex) => {
             if(aoe.inMarker(player)){
@@ -118,9 +122,15 @@ arena.onUpdate = () => {
             player.shape.stroke("none");
         }
     });
+
+    const data: number[] = [];
+    players.forEach(p => {
+        data.push(p.x, p.y);
+    });
+    window.history.replaceState(null, "", "?data=" + data.join(","));
 }
 
-arena.onUpdate();
+//arena.onUpdate();
 
 function loadData(data: number[]){
     const players = arena.getByTag(["player"]);
@@ -155,39 +165,16 @@ function loadData(data: number[]){
         buttonContainer?.appendChild(btn);
     }
 
-    const exportContainer = document.createElement("div");
-    const textarea = document.createElement("textarea");
-    const importBtn = document.createElement("button");
-    const exportBtn = document.createElement("button");
-
-    importBtn.innerText = "Import";
-    exportBtn.innerText = "Export";
-
-    exportContainer.appendChild(textarea);
-    exportContainer.appendChild(importBtn);
-    exportContainer.appendChild(exportBtn);
-
-    importBtn.addEventListener("click", () => {
-        let data: number[] = [];
-        try{
-            data = JSON.parse(textarea.value || "");
-        }catch(e){
-            console.error("invalid data");
+    const params = new URLSearchParams(location.search);
+    const paramData = params.get("data");
+    if(paramData){
+        const values = paramData.split(",").map(v => parseFloat(v));
+        if(values && values.length === players.length * 2){
+            loadData(values);
+        } else {
+            loadData(strats.Fiesta);
         }
-        loadData(data);
-    });
-
-    exportBtn.addEventListener("click", () => {
-        const data: number[] = [];
-        players.forEach(p => {
-            data.push(p.x, p.y);
-        });
-        textarea.textContent = JSON.stringify(data);
-    });
-
-    buttonContainer?.appendChild(exportContainer);
-
-    loadData(strats.Fiesta);
+    }
 })();
 
 const hot = (module as any)?.hot;

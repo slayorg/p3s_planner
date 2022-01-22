@@ -37,7 +37,6 @@ for(let i=0; i<3; i++){
         },
         ["tornado", "damage", "kill"]
     ));
-    console.log("add tornaod");
 }
 
 arena.getByTag(["boss"]).forEach(boss => {
@@ -106,7 +105,6 @@ arena.onUpdate = () => {
     const damageMarkers = arena.getByTag(["damage"]);
     const players = arena.getByTag(["player"]) as CircleMarker[];
     const playerHits: number[] = new Array(players.length).fill(0);
-    console.log(playerHits);
     damageMarkers.forEach(aoe => {
         players.forEach((player, pindex) => {
             if(aoe.inMarker(player)){
@@ -174,6 +172,8 @@ function loadData(data: number[]){
         } else {
             loadData(strats.Fiesta);
         }
+    } else {
+        loadData(strats.Fiesta);
     }
 })();
 
